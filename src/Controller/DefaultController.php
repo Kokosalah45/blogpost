@@ -77,16 +77,9 @@ class DefaultController extends AbstractController
         
     }
 
-    #[Route("{slug}/{hehe}/{xd}" , methods: ['GET'] , name : 'post_by_slug')]
-    public function getByPath($slug , $hehe , $xd , Request $request){
-       
-        return $this->json(['slug' => $slug , 'hehe' => $hehe , 'xd' => $xd , 'query' => $request->query->all()]);
-        
-    }
-
     #[Route('' , methods : ['POST'] , name : 'post_create')]
     public function create(Request $request){
-        $data = json_decode($request->getContent() , true);
+        $data = serialize($request->getContent());
         if(empty($data['title']) || empty($data['body']) || empty($data['slug'])){
             return $this->json(['error' => 'Missing required parameters'],400);
         }
@@ -96,7 +89,7 @@ class DefaultController extends AbstractController
             'body' => $data['body'],
             'slug' => $data['slug']
         ];
-        array_push($this->POSTS , $post);
+     
        
         return $this->json($post , 201);
     }
